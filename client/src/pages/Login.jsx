@@ -1,5 +1,8 @@
 import React, { useRef } from 'react'
 import { Container, Form, Button } from 'react-bootstrap';
+import io from "socket.io-client";
+
+const socket = io('http://localhost:3000/');
 
 const LETTERS = [
     "a",
@@ -30,12 +33,15 @@ const LETTERS = [
     "z",
 ]
 
-export default function Login({ onIdSubmit }) {
+export default function Login({ onIdSubmit, sendMsg }) {
     const idRef= useRef();
 
+    // joins an already created game
     function handleSubmit(e) {
         e.preventDefault();
-        onIdSubmit(idRef.current.value)
+        const gameId = idRef.current.value.toUpperCase()
+        onIdSubmit(gameId)
+        sendMsg(gameId)
     }
 
     /**
@@ -47,6 +53,7 @@ export default function Login({ onIdSubmit }) {
         for (let i = 0; i < keyLength; i++) {
             gameId = gameId + LETTERS[Math.floor(Math.random() * 26)]
         }
+        gameId.toUpperCase();
     }
 
 
