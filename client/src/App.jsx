@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import "./App.css";
-import Dashboard from "./pages/CreateGame";
 import Login from "./pages/Login";
 import useLocalStorage from "./hooks/useLocalStorage";
-import io from "socket.io-client";
-
-const socket = io('http://localhost:3000/');
+import GameLobby from "./pages/GameLobby";
+// import io from "socket.io-client";
+// const socket = io('http://localhost:3000/');
 
 function App() {
-  const [id, setId] = useLocalStorage("id", "");
+  const [playerId, setPlayerId] = useLocalStorage("playerId", "");
+  const [gameId, setGameId] = useLocalStorage("gameId", "");
+  const [admin, setAdmin] = useState()
+  const [numPlayers, setNumPlayers] = useState()
+  const [answerTime, setAnswerTime] = useState();
+  const [insiderTime, setInsiderTime] = useState();
+
+  
+  /** Socket IO Setup 
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [lastPong, setLastPong] = useState(null);
 
@@ -38,22 +45,33 @@ function App() {
   }
 
   const sendMsg = (msg) => {
-    console.log(msg)
     socket.emit('new msg', msg);
   }
 
-  return (
-    <div>
-      {/* {id ? <Dashboard id={id} /> : <Login onIdSubmit={setId} />} */}
-      <p>Connected: { '' + isConnected }</p>
-      <p>Last pong: { lastPong || '-' }</p>
-      <button onClick={ sendPing }>Send ping</button>
+  const checkRooms = () => {
+    socket.emit('check rooms')
+    console.log("check server console");
+  }
+  */
 
-      <Routes>
-        <Route path="/" element={<Login sendMsg={sendMsg} onIdSubmit={setId} />} />
-      </Routes>
-    </div>
+  return (
+    gameId ? 
+      <GameLobby 
+        gameId={gameId} 
+        setGameId={setGameId}
+        answerTime={answerTime}
+        insiderTime={insiderTime}
+      /> :  
+      <Login 
+        setGameId={setGameId} 
+        setPlayerId={setPlayerId} 
+        setAdmin={setAdmin}
+        setAnswerTime={setAnswerTime}
+        setInsiderTime={setInsiderTime}
+      />
   );
 }
+
+
 
 export default App;

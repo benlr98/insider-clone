@@ -1,74 +1,65 @@
-import React, { useRef } from 'react'
-import { Container, Form, Button } from 'react-bootstrap';
-import io from "socket.io-client";
+import React, { useState, useRef } from "react";
+import { Container, Form, Button, Stack, Modal } from "react-bootstrap";
+import CreateGameModal from "../components/CreateGameModal";
 
-const socket = io('http://localhost:3000/');
-
-const LETTERS = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-]
-
-export default function Login({ onIdSubmit, sendMsg }) {
-    const idRef= useRef();
-
-    // joins an already created game
-    function handleSubmit(e) {
-        e.preventDefault();
-        const gameId = idRef.current.value.toUpperCase()
-        onIdSubmit(gameId)
-        sendMsg(gameId)
-    }
-
-    /**
-     * Creates a new game Id and sets it within App
-     */
-    function createNewGameId() {
-        const keyLength = 4;
-        let gameId = '';
-        for (let i = 0; i < keyLength; i++) {
-            gameId = gameId + LETTERS[Math.floor(Math.random() * 26)]
-        }
-        gameId.toUpperCase();
-    }
+// import io from "socket.io-client";
+// const socket = io("http://localhost:3000/");
 
 
+
+export default function Login({ 
+  setGameId, 
+  setPlayerId, 
+  setAnswerTime, 
+  setInsiderTime 
+}) {
+
+  const idRef = useRef();
+
+  // Modal Controls
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  // joins an already created game
+  function handleSubmit(e) {
+    e.preventDefault();
+    const gameId = idRef.current.value.toUpperCase();
+    setGameId(gameId);
+  }
+
+  
 
   return (
-    <Container className="align-items-center d-flex" style={{ height: '100vh' }}>
-        <Form onSubmit={handleSubmit} className="w-100">
-            <Form.Group className="mb-3">
-                <Form.Label>Game Id</Form.Label>
-                <Form.Control type="text" ref={idRef} placeholder="" />
-            </Form.Group>
-            <Button className="me-3" variant="primary" type="submit">Join Game</Button>
-            <Button onClick={createNewGameId} variant="secondary">Create New Game</Button>
-            
+    <Container className="vh-100 d-flex">
+      <Stack
+        className="align-self-center mx-auto"
+        style={{ maxWidth: "300px" }}
+        gap={3}
+      >
+        <h1 className="text-center">Insider Clone</h1>
+        <Button className="mb-4" onClick={handleShow} variant="secondary">
+          Create New Game
+        </Button>
+        {/* <hr className="bg-dark border-3 border-top border-dark" /> */}
+        <Form onSubmit={handleSubmit} className="">
+          <Button className="mb-3 w-100" variant="primary" type="submit">
+            Join Game
+          </Button>
+          <Form.Group className="mb-3">
+            <Form.Control type="text" ref={idRef} placeholder="room id" />
+          </Form.Group>
         </Form>
+      </Stack>
+
+      <CreateGameModal
+        show={show}
+        handleClose={handleClose}
+        handleShow={handleShow}
+        setGameId={setGameId}
+        setAnswerTime={setAnswerTime}
+        setInsiderTime={setInsiderTime}
+      />
     </Container>
-  )
+  );
 }
