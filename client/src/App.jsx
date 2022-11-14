@@ -8,12 +8,16 @@ import GameLobby from "./pages/GameLobby";
 // const socket = io('http://localhost:3000/');
 
 function App() {
-  const [playerId, setPlayerId] = useLocalStorage("playerId", "");
+  const initialPlayer = {playerId: "1234", playerName: "Beben", insider: false, admin: false}
   const [gameId, setGameId] = useLocalStorage("gameId", "");
-  const [admin, setAdmin] = useState()
   const [numPlayers, setNumPlayers] = useState()
   const [answerTime, setAnswerTime] = useState();
   const [insiderTime, setInsiderTime] = useState();
+  
+  const [playerId, setPlayerId] = useLocalStorage("playerId", "");
+  const [playerName, setPlayerName] = useState("");
+  const [admin, setAdmin] = useState(false)
+  const [player, setPlayer] = useState(initialPlayer);
 
   
   /** Socket IO Setup 
@@ -61,6 +65,8 @@ function App() {
         setGameId={setGameId}
         answerTime={answerTime}
         insiderTime={insiderTime}
+        playerName={playerName}
+        admin={admin}
       /> :  
       <Login 
         setGameId={setGameId} 
@@ -68,6 +74,8 @@ function App() {
         setAdmin={setAdmin}
         setAnswerTime={setAnswerTime}
         setInsiderTime={setInsiderTime}
+        setPlayerName={setPlayerName}
+        setPlayerList={setPlayer}
       />
   );
 }

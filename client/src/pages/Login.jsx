@@ -11,7 +11,9 @@ export default function Login({
   setGameId, 
   setPlayerId, 
   setAnswerTime, 
-  setInsiderTime 
+  setInsiderTime, 
+  setAdmin,
+  setPlayerName,
 }) {
 
   const idRef = useRef();
@@ -47,6 +49,9 @@ export default function Login({
             Join Game
           </Button>
           <Form.Group className="mb-3">
+            <Form.Control type="text" ref={idRef} placeholder="name" />
+          </Form.Group>
+          <Form.Group className="mb-3">
             <Form.Control type="text" ref={idRef} placeholder="room id" />
           </Form.Group>
         </Form>
@@ -59,6 +64,8 @@ export default function Login({
         setGameId={setGameId}
         setAnswerTime={setAnswerTime}
         setInsiderTime={setInsiderTime}
+        setAdmin={setAdmin}
+        setPlayerName={setPlayerName}
       />
     </Container>
   );

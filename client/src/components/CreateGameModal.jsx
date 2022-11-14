@@ -37,17 +37,23 @@ export default function CreateGameModal({
   setGameId,
   setPlayerId,
   setAnswerTime,
-  setInsiderTime
+  setInsiderTime,
+  setAdmin,
 }) {
 
   const answerTimeInput = useRef();
   const insiderTimeInput = useRef();
+  const adminNameInput = useRef();
 
   function handleCreateGame() {
+    if (!adminNameInput.current.value) return;
+    const adminName = adminNameInput.current.value;
     const answerTime = answerTimeInput.current.value || 5;
     const insiderTime = insiderTimeInput.current.value || 3;
     const newGameId = createSecret(4);
     handleClose();
+    setAdmin(true);
+    setPlayerName(adminName)
     setGameId(newGameId);
     setAnswerTime(answerTime);
     setInsiderTime(insiderTime);
@@ -73,15 +79,19 @@ export default function CreateGameModal({
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Number of players</Form.Label>
-            <Form.Control type="number" autoFocus />
+          <Form.Group className="mb-3">
+            <Form.Label>Your name</Form.Label>
+            <Form.Control ref={adminNameInput} type="text" autoFocus required />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+          <Form.Group className="mb-3">
+            <Form.Label>Number of players</Form.Label>
+            <Form.Control type="number" />
+          </Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>Time to find answer</Form.Label>
             <Form.Control ref={answerTimeInput} type="number" />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+          <Form.Group className="mb-3">
             <Form.Label>Time to find insider</Form.Label>
             <Form.Control ref={insiderTimeInput} type="number" />
           </Form.Group>
@@ -91,7 +101,7 @@ export default function CreateGameModal({
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleCreateGame}>
+        <Button variant="primary" type="submit" onClick={handleCreateGame}>
           Go to Lobby
         </Button>
       </Modal.Footer>
