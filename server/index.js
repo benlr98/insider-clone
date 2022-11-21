@@ -32,7 +32,20 @@ io.on("connection", (socket) => {
         console.log(socket.id)
     })
 
-    socket.on('create room', (newGameId) => {
+    socket.on('join-room', (gameId) => {
+        const id = gameId.toUpperCase();
+        const roomSet = io.sockets.adapter.rooms.get(id);
+        let msg;
+        if (roomSet) {
+            socket.join(id);
+            msg = {msg: `Successfully joined room: ${id}`, gid: id, exists: true}
+        } else {
+            msg = {msg: `No room found with id: ${id}`, gid: id, exists: false}
+        }
+        socket.emit('room-joined', msg);
+    })
+
+    socket.on('create-room', (newGameId) => {
         console.log(newGameId);
         socket.join(newGameId);
         socket.emit('room-created', {msg: `Successfully created room ${newGameId}`});
@@ -49,6 +62,16 @@ io.on("connection", (socket) => {
     })
 
 });
+
+/** Log every room when created or joined
+io.of("/").adapter.on("create-room", (room) => {
+    console.log(`room ${room} was created`);
+});
+
+io.of("/").adapter.on("join-room", (room, id) => {
+    console.log(`socket ${id} has joined room ${room}`);
+});
+//  */
 
 
 httpServer.listen(3000, () => {

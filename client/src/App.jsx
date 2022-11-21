@@ -15,31 +15,28 @@ function App() {
 
 
   // takes in game ID to join
-  function handleJoinGame(newGameId) {
-    console.log(newGameId);
-    // TODO: check to see if game exists
-    setGameId(newGameId.toUpperCase());
-    setGameSettings((prevGameSettings) => {
-      return {
-        roomId: newGameId.toUpperCase(),
-        ...prevGameSettings,
-      }
-    });
+  function handleJoinGame(gameId) {
+    const id = gameId.toUpperCase();
+    // setGameId(id);
+    setGameSettings({roomId: id});
+
+    // join an already created room
+    joinRoom(id);
+
   }
 
   function handleCreateGame(newGameId, gameObject) {
     setGameId(newGameId);
     setGameSettings(gameObject);
     createRoom(newGameId);
-    // console.log(newGameId, gameObject)
   }
 
   function handleExitGame(currentGameId) {
     setGameId("");
     setGameSettings((prevGameSettings) => {
       return {
-        roomId: "",
         ...prevGameSettings,
+        roomId: "",
       }
     });
 
@@ -66,11 +63,12 @@ function App() {
       console.log('test pong');
     });
 
-    // socket.on("room joined", (msg) => {
-    //   console.log(msg);
-    // })
-
     socket.on("room-created", (msg) => {
+      console.log(msg.msg);
+    })
+
+    socket.on("room-joined", (msg) => {
+      if(msg.exists) {setGameId(msg.gid)}
       console.log(msg.msg);
     })
 
@@ -82,8 +80,9 @@ function App() {
       socket.off("connect");
       socket.off("disconnect");
       socket.off("pong");
-      socket.off("room joined");
-      socket.off("room created");
+      socket.off("room-created");
+      socket.off("room-joined");
+      socket.off("room-left");
     };
   }, []);
 
@@ -93,12 +92,12 @@ function App() {
     socket.emit('ping');
   }
 
-  const createRoom = (roomId) => {
-    socket.emit('create room', roomId)
+  const joinRoom = (roomId) => {
+    socket.emit('join-room', roomId)
   }
 
-  const joinRoom = (roomId) => {
-    socket.emit('join room', roomId)
+  const createRoom = (roomId) => {
+    socket.emit('create-room', roomId)
   }
 
   const leaveRoom = (roomId) => {
