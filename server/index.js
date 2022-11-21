@@ -38,6 +38,12 @@ io.on("connection", (socket) => {
         socket.emit('room-created', {msg: `Successfully created room ${newGameId}`});
     })
 
+    socket.on('leave room', (gameId) => {
+        console.log(gameId);
+        socket.leave(gameId);
+        socket.emit('room-left', {msg: `Left room ${gameId}`});
+    })
+
     socket.on('disconnect', () => {
         console.log('A user has disconnected')
     })

@@ -12,7 +12,7 @@ export default function GameLobby({
 
   return (
     <>
-        <Navigation handleExitGame={handleExitGame} />
+        <Navigation handleExitGame={() => handleExitGame(gameSettings.roomId)} />
         <Container className="">
             <h1 className="text-center mt-3">Game Lobby</h1>
             <div className="border border-5 rounded-4 p-3">

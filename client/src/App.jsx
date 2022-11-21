@@ -34,14 +34,17 @@ function App() {
     // console.log(newGameId, gameObject)
   }
 
-  function handleExitGame() {
+  function handleExitGame(currentGameId) {
     setGameId("");
     setGameSettings((prevGameSettings) => {
       return {
         roomId: "",
         ...prevGameSettings,
       }
-    })
+    });
+
+    leaveRoom(currentGameId)
+    
   }
 
   
@@ -71,6 +74,10 @@ function App() {
       console.log(msg.msg);
     })
 
+    socket.on("room-left", (msg) => {
+      console.log(msg.msg);
+    })
+
     return () => {
       socket.off("connect");
       socket.off("disconnect");
@@ -94,14 +101,18 @@ function App() {
     socket.emit('join room', roomId)
   }
 
-  const sendMsg = (msg) => {
-    socket.emit('new msg', msg);
+  const leaveRoom = (roomId) => {
+    socket.emit('leave room', roomId)
   }
 
-  const checkRooms = () => {
-    socket.emit('check rooms')
-    console.log("check server console");
-  }
+  // const sendMsg = (msg) => {
+  //   socket.emit('new msg', msg);
+  // }
+
+  // const checkRooms = () => {
+  //   socket.emit('check rooms')
+  //   console.log("check server console");
+  // }
   //*/
 
   return (
