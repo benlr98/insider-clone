@@ -4,27 +4,23 @@ import Navigation from '../components/Navigation';
 import '../App.css';
 
 export default function GameLobby({ 
-    gameId,
-    setGameId,
-    answerTime,
-    insiderTime,
-    playerName,
-    admin
+    gameSettings,
+    handleExitGame,
 }) {
 
 
 
   return (
     <>
-        <Navigation setGameId={setGameId} />
+        <Navigation handleExitGame={handleExitGame} />
         <Container className="">
             <h1 className="text-center mt-3">Game Lobby</h1>
             <div className="border border-5 rounded-4 p-3">
                 <h2 className="fs-5">Settings</h2>
                 <ul>
-                    <li>Room Id: <span className="fw-bold">{gameId}</span></li>
-                    <li>Find Answer: {answerTime} min</li>
-                    <li>Find Insider: {insiderTime} min</li>
+                    <li>Room Id: <span className="fw-bold">{gameSettings.roomId}</span></li>
+                    <li>Find Answer: {gameSettings.answerTime} min</li>
+                    <li>Find Insider: {gameSettings.insiderTime} min</li>
                 </ul>
                 <h2 className="fs-5">Players</h2>
                 <div className="player-group d-flex flex-wrap">

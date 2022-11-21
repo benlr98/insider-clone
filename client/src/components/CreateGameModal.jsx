@@ -34,29 +34,28 @@ export default function CreateGameModal({
   show,
   handleClose,
   handleShow,
-  setGameId,
-  setPlayerId,
-  setAnswerTime,
-  setInsiderTime,
-  setAdmin,
+  setGameSettings,
+  handleCreateGame,
 }) {
 
   const answerTimeInput = useRef();
   const insiderTimeInput = useRef();
   const adminNameInput = useRef();
 
-  function handleCreateGame() {
+  function handleClick() {
     if (!adminNameInput.current.value) return;
     const adminName = adminNameInput.current.value;
-    const answerTime = answerTimeInput.current.value || 5;
-    const insiderTime = insiderTimeInput.current.value || 3;
     const newGameId = createSecret(4);
     handleClose();
-    setAdmin(true);
-    setPlayerName(adminName)
-    setGameId(newGameId);
-    setAnswerTime(answerTime);
-    setInsiderTime(insiderTime);
+
+    const newGameObject = {
+      roomId: newGameId,
+      adminId: 12345,
+      answerTime: answerTimeInput.current.value || 5,
+      insiderTime: insiderTimeInput.current.value || 3,
+    }
+
+    handleCreateGame(newGameId, newGameObject);
   }
 
   /**
@@ -101,7 +100,7 @@ export default function CreateGameModal({
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" type="submit" onClick={handleCreateGame}>
+        <Button variant="primary" type="submit" onClick={handleClick}>
           Go to Lobby
         </Button>
       </Modal.Footer>

@@ -8,26 +8,23 @@ import CreateGameModal from "../components/CreateGameModal";
 
 
 export default function Login({ 
-  setGameId, 
-  setPlayerId, 
-  setAnswerTime, 
-  setInsiderTime, 
-  setAdmin,
-  setPlayerName,
+  handleJoinGame,  
+  handleCreateGame,
+  setGameSettings,
 }) {
 
-  const idRef = useRef();
+  const gameIdInputRef = useRef();
 
   // Modal Controls
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // joins an already created game
+  // joins a created game by setting game id to user input
   function handleSubmit(e) {
     e.preventDefault();
-    const gameId = idRef.current.value.toUpperCase();
-    setGameId(gameId);
+    const gameId = gameIdInputRef.current.value;
+    handleJoinGame(gameId);
   }
 
   
@@ -40,7 +37,7 @@ export default function Login({
         gap={3}
       >
         <h1 className="text-center">Insider Clone</h1>
-        <Button className="mb-4" onClick={handleShow} variant="secondary">
+        <Button className="mb-4" onClick={handleShow} variant="secondary"> 
           Create New Game
         </Button>
         {/* <hr className="bg-dark border-3 border-top border-dark" /> */}
@@ -49,10 +46,10 @@ export default function Login({
             Join Game
           </Button>
           <Form.Group className="mb-3">
-            <Form.Control type="text" ref={idRef} placeholder="name" />
+            <Form.Control type="text" placeholder="name" />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Control type="text" ref={idRef} placeholder="room id" />
+            <Form.Control type="text" ref={gameIdInputRef} placeholder="room id" />
           </Form.Group>
         </Form>
       </Stack>
@@ -61,11 +58,8 @@ export default function Login({
         show={show}
         handleClose={handleClose}
         handleShow={handleShow}
-        setGameId={setGameId}
-        setAnswerTime={setAnswerTime}
-        setInsiderTime={setInsiderTime}
-        setAdmin={setAdmin}
-        setPlayerName={setPlayerName}
+        handleCreateGame={handleCreateGame}
+        setGameSettings={setGameSettings}
       />
     </Container>
   );
